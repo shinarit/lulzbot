@@ -432,9 +432,9 @@ class ufb(irc.bot.SingleServerIRCBot):
 		if len(args) < 2:
 			self.reply(e, u'Használat: addwelcome nick köszöntés')
 		else:
-			self.welcomes[args[0]].append(u' '.join(args[1:]))
+			self.welcomes[args[0].lower()].append(u' '.join(args[1:]))
 			with codecs.open(u'welcome.txt', "a", encoding = "utf-8") as file:
-				file.write(args[0]+' '+u' '.join(args[1:])+u'\n')
+				file.write(args[0].lower()+' '+u' '.join(args[1:])+u'\n')
 				file.close()
 			self.reply(e, u'Köszöntés hozzáadva!')
 
