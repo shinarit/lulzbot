@@ -16,7 +16,13 @@ import os
 import commands
 import shutil
 
-time.sleep(5)
-os.rename(u'bot.py', u'bot.py.bak')
-os.rename(u'bot.py.new', u'bot.py')
-subprocess.Popen([u'python', u'bot.py'])
+
+try:
+    shutil.move(u'bot.py', u'backup/bot.py')
+	urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/master/bot.py', u'bot.py')
+    shutil.move(u'uf.py', u'backup/uf.py')
+    urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/master/uf.py', u'uf.py')
+	subprocess.Popen([u'python', u'bot.py'])
+	sys.exit()
+except:
+	sys.exit([1])
