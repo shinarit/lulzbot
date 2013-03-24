@@ -130,7 +130,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.mdict[name] = localresult
 
 	def read_file(self):
-		file = codecs.open(u'log.txt', "rU", encoding = "utf-8")
+		file = codecs.open(u'data/mimiclog', "rU", encoding = "utf-8")
 		for line in file:
 			name = line.split(u': ')[0]
 			message = u': '.join(line.split(u': ')[1:])
@@ -143,30 +143,30 @@ class ufb(irc.bot.SingleServerIRCBot):
 		self.channel = "#magyarchan"
 		self.ufgame = uf.ufgame()
 		self.logfilename = time.strftime("%Y-%m-%d_%H")
-		self.logfile = codecs.open("/www/lulzlog/"+self.logfilename+".txt", "a", encoding = "utf-8")
+		self.logfile = codecs.open("log/"+self.logfilename, "a", encoding = "utf-8")
 		self.mdict = {}
 		self.read_file()
 
-		with codecs.open(u'admin.txt', "rU", encoding = "utf-8") as file:
+		with codecs.open(u'data/admin', "rU", encoding = "utf-8") as file:
 			for line in file:
 				self.admins.append(self.remove_newline(line).lower())
 			file.close()
 
-		with codecs.open(u'feri.txt', "rU", encoding = "utf-8") as file:
+		with codecs.open(u'data/furry', "rU", encoding = "utf-8") as file:
 			self.ferikepek = [kep.lower() for kep in file.readlines()]
 			file.close
 
-		with codecs.open(u'poni.txt', "rU", encoding = "utf-8") as file:
+		with codecs.open(u'data/brony', "rU", encoding = "utf-8") as file:
 			self.ponikepek = [kep.lower() for kep in file.readlines()]
 			file.close
 
-		with codecs.open(u'welcome.txt', "rU", encoding = "utf-8") as file:
+		with codecs.open(u'data/welcome', "rU", encoding = "utf-8") as file:
 			for line in file:
 				_n = line.split()[0].lower()
 				_m = self.remove_newline(u' '.join(line.split()[1:]))
 				self.welcomes[_n].append(_m)
 
-		with codecs.open(u'seen.txt', "rU", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "rU", encoding = "utf-8") as file:
 			for line in file:
 				_n = line.split()[0].lower()
 				_s = time.localtime(float(line.split()[1]))
@@ -206,7 +206,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 		if time.strftime("%Y-%m-%d_%H") != self.logfilename:
 			self.logfilename=time.strftime("%Y-%m-%d_%H")
 			self.logfile.close()
-			self.logfile = codecs.open("/www/lulzlog/"+self.logfilename+".txt", "a", encoding = "utf-8")
+			self.logfile = codecs.open("log/"+self.logfilename, "a", encoding = "utf-8")
 		self.logfile.write(time.strftime("%M:%S")+" - "+log+"\n")
 		self.logfile.flush()
 
@@ -394,7 +394,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.reply(e, u'Használat: addclop link')
 		else:
 			self.ponikepek.append(args[0])
-			with codecs.open(u'poni.txt', "a", encoding = "utf-8") as file:
+			with codecs.open(u'data/brony', "a", encoding = "utf-8") as file:
 				file.write(u'\n'+args[0])
 				file.close()
 			self.reply(e, u'Link hozzáadva!')
@@ -413,7 +413,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.reply(e, u'Használat: addyiff link')
 		else:
 			self.ferikepek.append(args[0])
-			with codecs.open(u'feri.txt', "a", encoding = "utf-8") as file:
+			with codecs.open(u'data/furry', "a", encoding = "utf-8") as file:
 				file.write(u'\n'+args[0])
 				file.close()
 			self.reply(e, u'Link hozzáadva!')
@@ -423,7 +423,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.reply(e, u'Használat: addadmin nick')
 		else:
 			self.admins.append(args[0].lower())
-			with codecs.open(u'admin.txt', "a", encoding = "utf-8") as file:
+			with codecs.open(u'data/admin', "a", encoding = "utf-8") as file:
 				file.write(u'\n'+args[0].lower())
 				file.close()
 			self.reply(e, u'Admin hozzáadva!')
@@ -433,7 +433,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.reply(e, u'Használat: addwelcome nick köszöntés')
 		else:
 			self.welcomes[args[0].lower()].append(u' '.join(args[1:]))
-			with codecs.open(u'welcome.txt', "a", encoding = "utf-8") as file:
+			with codecs.open(u'data/welcome', "a", encoding = "utf-8") as file:
 				file.write(args[0].lower()+' '+u' '.join(args[1:])+u'\n')
 				file.close()
 			self.reply(e, u'Köszöntés hozzáadva!')
@@ -712,7 +712,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 				except IOError:
 					pass
 		self.lastseen[e.source.nick.lower()] = (time.localtime(time.time()), e.source.nick+u': '+e.arguments[0])
-		with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 			for _n in self.lastseen.keys():
 				_t, _r = self.lastseen[_n]
 				file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
@@ -730,7 +730,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 			if not found:
 				self.say_public(u'hát te meg ki a here vagy? :\\')
 			self.lastseen[e.source.nick.lower()] = (time.localtime(time.time()), u'belépett a csatornába')
-			with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+			with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 				for _n in self.lastseen.keys():
 					_t, _r = self.lastseen[_n]
 					file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
@@ -740,7 +740,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 		self.writelog(e.source.nick+" quit. ("+e.arguments[0]+")")
 		self.ufgame.leave(e.source.nick)
 		self.lastseen[e.source.nick.lower()] = (time.localtime(time.time()), u'kilépett: '+e.arguments[0])
-		with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 			for _n in self.lastseen.keys():
 				_t, _r = self.lastseen[_n]
 				file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
@@ -750,7 +750,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 		self.writelog(e.source.nick+" left.")
 		self.ufgame.leave(e.source.nick)
 		self.lastseen[e.source.nick.lower()] = (time.localtime(time.time()), u'kilépett a csatornáról')
-		with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 			for _n in self.lastseen.keys():
 				_t, _r = self.lastseen[_n]
 				file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
@@ -761,7 +761,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 		self.ufgame.rename(e.source.nick, e.target)
 		self.lastseen[e.source.nick.lower()] = (time.localtime(time.time()), u'nicket váltott erre: '+e.target)
 		self.lastseen[e.target.lower()] = (time.localtime(time.time()), u'nicket váltott erről: '+e.source.nick)
-		with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 			for _n in self.lastseen.keys():
 				_t, _r = self.lastseen[_n]
 				file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
@@ -773,7 +773,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 		if e.arguments[0] == c.get_nickname():
 			self.connection.join(self.channel)
 		self.lastseen[e.arguments[0].lower()] = (time.localtime(time.time()), e.source.nick+u' kirúgta: '+e.arguments[1])
-		with codecs.open(u'seen.txt', "w", encoding = "utf-8") as file:
+		with codecs.open(u'data/seen', "w", encoding = "utf-8") as file:
 			for _n in self.lastseen.keys():
 				_t, _r = self.lastseen[_n]
 				file.write(_n+u' '+str(time.mktime(_t))+u' '+_r+u'\n')
