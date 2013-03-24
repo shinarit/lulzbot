@@ -554,7 +554,7 @@ class ufb(irc.bot.SingleServerIRCBot):
 
 	def cmda_update(self, e, args):
 		try:
-			urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/master/update.py', u'update.py')
+			urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/updatetest/update.py', u'update.py')
 			subprocess.Popen([u'python', u'update.py'])
 			self.disconnect(u'updating...')
 			time.sleep(3)
