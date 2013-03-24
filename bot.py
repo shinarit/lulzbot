@@ -432,9 +432,9 @@ class ufb(irc.bot.SingleServerIRCBot):
 		if len(args) < 2:
 			self.reply(e, u'Használat: addwelcome nick köszöntés')
 		else:
-			self.welcomes[args[0]].append(u' '.join(args[1:]))
+			self.welcomes[args[0].lower()].append(u' '.join(args[1:]))
 			with codecs.open(u'welcome.txt', "a", encoding = "utf-8") as file:
-				file.write(args[0]+' '+u' '.join(args[1:])+u'\n')
+				file.write(args[0].lower()+' '+u' '.join(args[1:])+u'\n')
 				file.close()
 			self.reply(e, u'Köszöntés hozzáadva!')
 
@@ -553,18 +553,15 @@ class ufb(irc.bot.SingleServerIRCBot):
 			self.reply(e, HTMLParser.HTMLParser().unescape(answer))
 
 	def cmda_update(self, e, args):
-		if len(args) == 0:
-			self.reply(e, u'Használat: update url')
-		else:
-			try:
-				urllib.urlretrieve(args[0], u'bot.py.new')
-				os.remove(u'bot.py.bak')
-				subprocess.Popen([u'python', u'update.py'])
-				self.disconnect(u'updating...')
-				time.sleep(3)
-				sys.exit()
-			except:
-				self.reply(e, u'Szar a linked')
+		try:
+			urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/master/bot.py', u'bot.py.new')
+			os.remove(u'bot.py.bak')
+			subprocess.Popen([u'python', u'update.py'])
+			self.disconnect(u'updating...')
+			time.sleep(3)
+			sys.exit()
+		except:
+			self.reply(e, u'Somebody set up us the bomb.')
 
 	def cmd_debugwelcome(self, e, args):
 		if len(args) == 0:
