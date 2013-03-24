@@ -18,10 +18,10 @@ import shutil
 
 
 try:
-    shutil.move(u'bot.py', u'backup/bot.py')
+	shutil.move(u'bot.py', u'backup/bot.py')
 	urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/updatetest/bot.py', u'bot.py')
-    shutil.move(u'uf.py', u'backup/uf.py')
-    urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/updatetest/uf.py', u'uf.py')
+	shutil.move(u'uf.py', u'backup/uf.py')
+	urllib.urlretrieve(u'https://raw.github.com/shinarit/lulzbot/updatetest/uf.py', u'uf.py')
 	subprocess.Popen([u'python', u'bot.py'])
 	sys.exit()
 except:
